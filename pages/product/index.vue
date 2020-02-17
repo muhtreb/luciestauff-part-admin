@@ -20,7 +20,7 @@
         </v-toolbar>
       </template>
       <template v-slot:item.imageUrl="{ item }">
-        <img :src="item.imageUrl" width="50px" />
+        <img :src="item.smallImageUrl" width="50px" />
       </template>
       <template v-slot:item.action="{ item }">
         <div class="data-table-actions">
