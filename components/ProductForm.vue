@@ -28,14 +28,20 @@
       </div>
     </div>
     <v-text-field
-      v-model="blogPost.title"
+      v-model="product.title"
       label="Titre"
       :error-messages="getFieldErrors('title')"
       outlined
     ></v-text-field>
+    <v-text-field
+      v-model="product.url"
+      label="URL"
+      :error-messages="getFieldErrors('url')"
+      outlined
+    ></v-text-field>
     <v-autocomplete
-      v-model="blogPost.categories"
-      :items="blogPostCategories"
+      v-model="product.categories"
+      :items="productCategories"
       item-value="id"
       item-text="name"
       outlined
@@ -44,34 +50,6 @@
       label="Catégories"
       multiple
     ></v-autocomplete>
-    <v-autocomplete
-      v-model="blogPost.products"
-      :items="products"
-      item-value="id"
-      item-text="title"
-      outlined
-      chips
-      small-chips
-      label="Produits"
-      multiple
-    ></v-autocomplete>
-    <div>
-      <h3>Contenu</h3>
-      <tui-markdown-editor
-        v-model="blogPost.content"
-        mode="wysiwyg"
-        :error-messages="getFieldErrors('content')"
-      />
-      <div v-if="hasFieldErrors('content')">
-        <div
-          v-for="(error, index) in getFieldErrors('content')"
-          :key="index"
-          class="red--text my-2"
-        >
-          {{ error }}
-        </div>
-      </div>
-    </div>
     <v-btn color="primary" type="submit">Envoyer</v-btn>
   </v-form>
 </template>
@@ -84,23 +62,21 @@ export default {
   mixins: [FormErrors],
 
   props: {
-    blogPost: {
+    product: {
       type: Object,
       default: () => {
         return {
           title: '',
           image: false,
-          content: '',
           slug: '',
-          categories: [],
-          products: []
+          url: '',
+          categories: []
         }
       }
     }
   },
   computed: {
-    ...mapState('blogPostCategory', ['blogPostCategories']),
-    ...mapState('product', ['products'])
+    ...mapState('productCategory', ['productCategories'])
   },
   data() {
     return {
@@ -127,33 +103,26 @@ export default {
           formData.append('image_delete', true)
         }
 
-        formData.append('title', this.blogPost.title)
-        formData.append('content', this.blogPost.content)
-        for (const category of Object.values(this.blogPost.categories)) {
+        formData.append('title', this.product.title)
+        formData.append('url', this.product.url)
+        for (const category of Object.values(this.product.categories)) {
           formData.append(
             'categories[]',
             typeof category === 'object' ? category.id : category
           )
         }
 
-        for (const product of Object.values(this.blogPost.products)) {
-          formData.append(
-            'products[]',
-            typeof product === 'object' ? product.id : product
-          )
-        }
-
         try {
-          if (this.blogPost.id) {
-            await this.$blogPostRepository.updateBlogPost(
-              this.blogPost.id,
+          if (this.product.id) {
+            await this.$productRepository.updateProduct(
+              this.product.id,
               formData
             )
           } else {
-            await this.$blogPostRepository.createBlogPost(formData)
+            await this.$productRepository.createProduct(formData)
           }
           this.$router.push({
-            name: 'blogPost'
+            name: 'product'
           })
         } catch (error) {
           this.valid = false
@@ -175,12 +144,9 @@ export default {
     }
   },
   mounted() {
-    this.imageUrl = this.blogPost.imageUrl
-    this.initialImageUrl = this.blogPost.imageUrl
-    this.$store.dispatch('blogPostCategory/getBlogPostCategories', {
-      per_page: -1
-    })
-    this.$store.dispatch('product/getProducts', {
+    this.imageUrl = this.product.imageUrl
+    this.initialImageUrl = this.product.imageUrl
+    this.$store.dispatch('productCategory/getProductCategories', {
       per_page: -1
     })
   }

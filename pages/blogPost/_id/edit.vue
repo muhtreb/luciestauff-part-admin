@@ -9,7 +9,9 @@ import BlogPostForm from '@/components/BlogPostForm'
 export default {
   components: { BlogPostForm },
   async asyncData({ route, app }) {
-    const response = await app.$blogRepository.getBlogPostById(route.params.id)
+    const response = await app.$blogPostRepository.getBlogPostById(
+      route.params.id
+    )
     return {
       blogPost: response.data
     }
