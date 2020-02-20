@@ -4,7 +4,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setBlogsPosts(state, products) {
+  setProducts(state, products) {
     state.products = products
   },
   setPagination(state, pagination) {
@@ -15,7 +15,7 @@ export const mutations = {
 export const actions = {
   async getProducts({ commit }, params) {
     const response = await this.$productRepository.getProducts(params)
-    commit('setBlogsPosts', response.data)
+    commit('setProducts', response.data)
     commit('setPagination', response.meta)
   }
 }

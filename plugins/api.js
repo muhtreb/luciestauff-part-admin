@@ -4,6 +4,7 @@ import createProductRepository from '~/api/product'
 import createProductCategoryRepository from '~/api/productCategory'
 import createSettingRepository from '~/api/setting'
 import createContactMessageRepository from '~/api/contactMessage'
+import createTestimonialRepository from '~/api/testimonial'
 
 export default (context, inject) => {
   inject('settingRepository', createSettingRepository(context.$axios)())
@@ -21,4 +22,5 @@ export default (context, inject) => {
     'contactMessageRepository',
     createContactMessageRepository(context.$axios)()
   )
+  inject('testimonialRepository', createTestimonialRepository(context.$axios)())
 }

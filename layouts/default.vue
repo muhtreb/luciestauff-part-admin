@@ -63,6 +63,14 @@
 
           <v-list-item-title>Messages</v-list-item-title>
         </v-list-item>
+
+        <v-list-item link :to="{ name: 'testimonial' }">
+          <v-list-item-icon>
+            <v-icon>mdi-star</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-title>Témoignages</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
