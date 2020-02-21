@@ -48,6 +48,20 @@
           </v-list-item>
         </v-list-group>
 
+        <v-list-group prepend-icon="mdi-file-document-edit">
+          <template v-slot:activator>
+            <v-list-item-title>Portfolio</v-list-item-title>
+          </template>
+
+          <v-list-item link :to="{ name: 'portfolioCategory' }">
+            <v-list-item-icon>
+              <v-icon>mdi-view-list</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-title>Liste des catégories</v-list-item-title>
+          </v-list-item>
+        </v-list-group>
+
         <v-list-item link :to="{ name: 'setting' }">
           <v-list-item-icon>
             <v-icon>mdi-cogs</v-icon>

@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1>Catégories de produits</h1>
+    <h1>Catégories de portfolio</h1>
 
     <v-data-table
       :headers="headers"
-      :items="productCategories"
+      :items="portfolioCategories"
       :items-per-page="perPage"
       :loading="loading"
       :options.sync="options"
-      :server-items-length="pagination ? pagination.total : products.length"
+      :server-items-length="pagination ? pagination.total : portfolios.length"
       class="elevation-1"
     >
       <template v-slot:top>
@@ -16,16 +16,19 @@
           <v-toolbar-title>Liste des catégories</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-btn @click="addProductCategory()">Ajouter une catégorie</v-btn>
+          <v-btn @click="addPortfolioCategory()">Ajouter une catégorie</v-btn>
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
         <div class="data-table-actions">
-          <v-icon class="mr-2" @click="editProductCategory(item)">
+          <v-icon class="mr-2" @click="editPortfolioCategory(item)">
             mdi-pencil
           </v-icon>
-          <v-icon @click="deleteProductCategory(item)">
+          <v-icon class="mr-2" @click="deletePortfolioCategory(item)">
             mdi-delete
+          </v-icon>
+          <v-icon @click="managePortfolioCategoryImages(item)">
+            mdi-eye
           </v-icon>
         </div>
       </template>
@@ -53,16 +56,17 @@ export default {
   }),
   computed: {
     ...mapState({
-      productCategories: (state) => state.productCategory.productCategories,
-      pagination: (state) => state.productCategory.pagination
+      portfolioCategories: (state) =>
+        state.portfolioCategory.portfolioCategories,
+      pagination: (state) => state.portfolioCategory.pagination
     })
   },
   methods: {
-    async fetchProductCategories() {
+    async fetchPortfolioCategories() {
       this.loading = true
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
 
-      await this.$store.dispatch('productCategory/getProductCategories', {
+      await this.$store.dispatch('portfolioCategory/getPortfolioCategories', {
         page,
         per_page: itemsPerPage,
         sort_by: sortBy,
@@ -70,31 +74,39 @@ export default {
       })
       this.loading = false
     },
-    addProductCategory() {
+    addPortfolioCategory() {
       this.$router.push({
-        name: 'productCategory-add'
+        name: 'portfolioCategory-add'
       })
     },
-    editProductCategory(productCategory) {
+    editPortfolioCategory(portfolioCategory) {
       this.$router.push({
-        name: 'productCategory-id-edit',
-        params: { id: productCategory.id }
+        name: 'portfolioCategory-id-edit',
+        params: { id: portfolioCategory.id }
       })
     },
-    async deleteProductCategory(product) {
+    managePortfolioCategoryImages(portfolioCategory) {
+      this.$router.push({
+        name: 'portfolioCategory-id-images',
+        params: { id: portfolioCategory.id }
+      })
+    },
+    async deletePortfolioCategory(portfolio) {
       if (confirm('Êtes vous sûr de vouloir supprimer cette catégorie ?')) {
-        await this.$productCategoryRepository.deleteProductCategory(product.id)
-        await this.fetchProductCategories()
+        await this.$portfolioCategoryRepository.deletePortfolioCategory(
+          portfolio.id
+        )
+        await this.fetchPortfolioCategories()
       }
     }
   },
   mounted() {
-    this.fetchProductCategories()
+    this.fetchPortfolioCategories()
   },
   watch: {
     options: {
       handler() {
-        this.fetchProductCategories()
+        this.fetchPortfolioCategories()
       },
       deep: true
     }

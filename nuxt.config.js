@@ -31,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/api', '~/plugins/tuiMarkdown'],
+  plugins: ['~/plugins/api', '~/plugins/tuiMarkdown', '~/plugins/grid'],
   /*
    ** Nuxt.js dev-modules
    */

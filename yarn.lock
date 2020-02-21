@@ -8152,6 +8152,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+vue-js-grid@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vue-js-grid/-/vue-js-grid-1.0.1.tgz#3d09314d7e8108a5a585ff02bea8ef5a7aefd1ec"
+  integrity sha512-YOCRATqtab8DWzaVVRrTRD81+Q6brafsDlRro3Y6miM6aQc/Mi3dZcj1mjDooUlBnJlFcYYlC50eD6j4vaYfHA==
+
 vue-loader@^15.8.3:
   version "15.9.0"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.0.tgz#5d4b0378a4606188fc83e587ed23c94bc3a10998"
