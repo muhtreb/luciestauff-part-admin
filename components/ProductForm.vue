@@ -144,8 +144,8 @@ export default {
     }
   },
   mounted() {
-    this.imageUrl = this.product.imageUrl
-    this.initialImageUrl = this.product.imageUrl
+    this.imageUrl = this.product.image_url
+    this.initialImageUrl = this.product.image_url
     this.$store.dispatch('productCategory/getProductCategories', {
       per_page: -1
     })

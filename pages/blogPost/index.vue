@@ -19,8 +19,8 @@
           <v-btn @click="addBlogPost()">Ajouter un post</v-btn>
         </v-toolbar>
       </template>
-      <template v-slot:item.imageUrl="{ item }">
-        <img :src="item.smallImageUrl" width="50px" />
+      <template v-slot:item.image_url="{ item }">
+        <img :src="item.small_image_url" width="50px" />
       </template>
       <template v-slot:item.action="{ item }">
         <div class="data-table-actions">
@@ -49,7 +49,7 @@ export default {
     perPage: 10,
     headers: [
       { text: 'ID', value: 'id' },
-      { text: 'Image', value: 'imageUrl' },
+      { text: 'Image', value: 'image_url' },
       { text: 'Titre', value: 'title' },
       { text: 'slug', value: 'slug' },
       { text: 'Date', value: 'created_at' },

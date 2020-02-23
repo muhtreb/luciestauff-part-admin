@@ -6,6 +6,11 @@
       :error-messages="getFieldErrors('name')"
     ></v-text-field>
 
+    <v-checkbox
+      v-model="portfolioCategory.show_in_portfolio"
+      label="Afficher dans le portfolio"
+    ></v-checkbox>
+
     <v-btn color="primary" type="submit">Envoyer</v-btn>
   </v-form>
 </template>
@@ -42,6 +47,10 @@ export default {
         const formData = new FormData()
 
         formData.append('name', this.portfolioCategory.name)
+        formData.append(
+          'show_in_portfolio',
+          this.portfolioCategory.show_in_portfolio
+        )
 
         try {
           if (this.portfolioCategory.id) {

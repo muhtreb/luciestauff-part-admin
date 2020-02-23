@@ -8,20 +8,22 @@
         multiple
         @change="onSelectImages"
         accept="image/*"
+        placeholder="Choisissez des images à uploader"
       />
     </v-form>
 
-    <div v-if="uploadedFiles.length > 0">
+    <div v-if="getUploadedImages.length > 0">
       <h2>Images à uploader</h2>
       <div class="uploaded-images">
         <div
           class="uploaded-image"
-          v-for="(uploadedFile, index) in uploadedFiles"
+          v-for="(uploadedImage, index) in getUploadedImages"
           :key="index"
         >
-          <img :src="uploadedFile" /><br />
+          <img :src="uploadedImage" /><br />
           <div class="uploaded-image-actions">
-            <a href="#" @click.prevent="removeUploadedFile(index)">Delete</a>
+            <a href="#" @click.prevent="removeUploadedImage(index)">Delete</a
+            ><br />
             <a href="#" @click.prevent="uploadImage(index)">Upload</a>
           </div>
         </div>
@@ -34,17 +36,24 @@
     <grid
       :draggable="true"
       :sortable="true"
-      :items="files"
+      :items="images"
       :height="200"
       :width="200"
+      @sort="onSort"
+      v-if="images.length > 0"
     >
       <template slot="cell" scope="props">
         <div
           class="image"
-          :style="{ backgroundImage: `url('${props.item}')` }"
-        ></div>
+          :style="{ backgroundImage: `url('${props.item.small_image_url}')` }"
+        >
+          <div class="image-actions">
+            <a href="" @click.prevent="deleteImage(props.item)">X</a>
+          </div>
+        </div>
       </template>
     </grid>
+    <div v-else>Aucune image</div>
   </div>
 </template>
 
@@ -53,53 +62,116 @@ export default {
   data() {
     return {
       files: [],
-      uploadedFiles: []
+      uploadedImages: [],
+      images: [],
+      timeoutSort: null
     }
   },
   async asyncData({ route, app }) {
-    const response = await app.$portfolioCategoryRepository.getPortfolioCategoryById(
+    const portfolioCategoryResponse = await app.$portfolioCategoryRepository.getPortfolioCategoryById(
+      route.params.id
+    )
+
+    const portfolioCategoryImagesResponse = await app.$portfolioCategoryRepository.getPortfolioCategoryImages(
       route.params.id
     )
     return {
-      portfolioCategory: response.data
+      portfolioCategory: portfolioCategoryResponse.data,
+      images: portfolioCategoryImagesResponse.data
+    }
+  },
+
+  computed: {
+    getUploadedImages() {
+      return this.uploadedImages.filter((e) => e !== null)
     }
   },
   methods: {
     onSelectImages(files) {
       const vm = this
+      this.files = [...this.files, ...files]
       if (files) {
         const filesCount = files.length
         for (let i = 0; i < filesCount; i++) {
           const reader = new FileReader()
           reader.onload = function(e) {
-            vm.uploadedFiles.push(e.target.result)
+            vm.uploadedImages.push(e.target.result)
           }
           reader.readAsDataURL(files[i])
         }
       }
     },
-    removeUploadedFile(index) {
-      this.uploadedFiles.splice(index, 1)
+    removeUploadedImage(index) {
+      this.uploadedImages.splice(index, 1)
     },
     removeFile(index) {
       this.files.splice(index, 1)
     },
-    uploadImage(index) {
-      const file = this.uploadedFiles[index]
+    async uploadImage(index) {
+      const file = this.files[index]
 
-      this.uploadedFiles.splice(index, 1)
-      this.files.push(file)
-    },
-    uploadImages() {
-      const uploadedFiles = Object.assign({}, this.uploadedFiles)
-      const files = []
-      for (const [index, image] of Object.entries(uploadedFiles)) {
-        console.log(index)
-        files.push(image)
+      const formData = new FormData()
+      formData.append('image', file)
+      formData.append('categoryId', this.$route.params.id)
+      try {
+        const response = await this.$axios.post(
+          'admin/portfolio/images/upload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        )
+        this.images.push(response.data.data)
+      } catch (error) {
+        console.log(error)
       }
 
-      this.uploadedFiles = []
-      this.files = files
+      this.uploadedImages.splice(index, 1, null)
+    },
+    async uploadImages() {
+      for (const index of Object.keys(this.uploadedImages)) {
+        await this.uploadImage(index)
+      }
+
+      this.files = []
+      this.$refs.form.reset()
+    },
+    onSort(event) {
+      clearTimeout(this.timeoutSort)
+      this.timeoutSort = setTimeout(() => {
+        const ids = event.items.map((e) => e.item.id)
+
+        const formData = new FormData()
+        for (const [index, id] of Object.entries(ids)) {
+          formData.append(`ids[${index}]`, id)
+        }
+
+        this.$axios.post(
+          `admin/portfolio/categories/${this.$route.params.id}/images/position`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        )
+      }, 1000)
+    },
+    async deleteImage(item) {
+      if (!confirm('Êtes vous sûr de vouloir supprimer cette image ?')) {
+        return false
+      }
+      try {
+        await this.$axios.delete(`admin/portfolio/images/${item.id}`)
+
+        const index = this.images.findIndex((el) => el.id === item.id)
+
+        this.images.splice(index, 1)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
@@ -112,21 +184,36 @@ export default {
   .uploaded-image {
     position: relative;
     margin: 10px;
-    padding: 10px;
     background: lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     img {
-      width: 150px;
+      height: 150px;
     }
 
     .uploaded-image-actions {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: none;
+
+      a {
+        color: black;
+        text-decoration: none;
+      }
+    }
+
+    &:hover {
+      .uploaded-image-actions {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.5);
+      }
     }
   }
 }
@@ -163,6 +250,28 @@ export default {
     background-position: center;
     width: 60px;
     height: 60px;
+    position: relative;
+    .image-actions {
+      display: none;
+    }
+    &:hover {
+      .image-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        color: black;
+        a {
+          color: black;
+          text-decoration: none;
+        }
+      }
+    }
   }
 }
 </style>

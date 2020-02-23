@@ -175,8 +175,8 @@ export default {
     }
   },
   mounted() {
-    this.imageUrl = this.blogPost.imageUrl
-    this.initialImageUrl = this.blogPost.imageUrl
+    this.imageUrl = this.blogPost.image_url
+    this.initialImageUrl = this.blogPost.image_url
     this.$store.dispatch('blogPostCategory/getBlogPostCategories', {
       per_page: -1
     })

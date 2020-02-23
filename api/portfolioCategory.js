@@ -9,6 +9,10 @@ export default ($axios) => () => ({
     return $axios.$get(`/admin/portfolio/categories/${id}`)
   },
 
+  getPortfolioCategoryImages(id) {
+    return $axios.$get(`/admin/portfolio/categories/${id}/images`)
+  },
+
   createPortfolioCategory(formData) {
     return $axios.$post(`/admin/portfolio/categories`, formData, {
       headers: {
