@@ -2,14 +2,19 @@
   <div>
     <h1>{{ portfolioCategory.name }}</h1>
 
-    <v-form ref="form">
+    <v-form ref="form" class="form">
       <v-file-input
         type="file"
         multiple
         @change="onSelectImages"
         accept="image/*, video/*"
         placeholder="Choisissez des images à uploader"
+        v-model="files"
       />
+      <div class="form-loading" v-if="files.length > 0">
+        {{ nbMediasUploaded }} / {{ files.length }}<br />
+        {{ currentFileUploading }}
+      </div>
     </v-form>
 
     <h2>Medias</h2>
@@ -45,7 +50,10 @@ export default {
   data() {
     return {
       medias: [],
-      timeoutSort: null
+      timeoutSort: null,
+      nbMediasUploaded: 0,
+      currentFileUploading: '',
+      files: []
     }
   },
   async asyncData({ route, app }) {
@@ -69,7 +77,9 @@ export default {
   },
   methods: {
     async onSelectImages(files) {
+      this.files = files
       for (const file of Object.values(files)) {
+        this.currentFileUploading = file.name
         const formData = new FormData()
         formData.append('file', file)
         formData.append('categoryId', this.$route.params.id)
@@ -84,6 +94,8 @@ export default {
             }
           )
           this.medias.push(response.data.data)
+
+          this.nbMediasUploaded++
         } catch (error) {
           console.log(error)
         }
@@ -93,7 +105,9 @@ export default {
         'snackbar/snackbarSuccess',
         'Les medias ont bien été uploadés'
       )
-      // this.$refs.form.reset()
+      this.files = []
+      this.nbMediasUploaded = 0
+      this.currentFileUploading = ''
     },
     onEndDrag(event) {
       const ids = this.medias.map((e) => e.id)
@@ -132,6 +146,23 @@ export default {
 </script>
 
 <style lang="scss">
+.form {
+  position: relative;
+  .form-loading {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+  }
+}
 .uploaded-images {
   display: flex;
   flex-wrap: wrap;
