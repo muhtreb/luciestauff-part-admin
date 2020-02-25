@@ -27,7 +27,7 @@
           <v-icon class="mr-2" @click="deletePortfolioCategory(item)">
             mdi-delete
           </v-icon>
-          <v-icon @click="managePortfolioCategoryImages(item)">
+          <v-icon @click="managePortfolioCategoryMedias(item)">
             mdi-eye
           </v-icon>
         </div>
@@ -85,9 +85,9 @@ export default {
         params: { id: portfolioCategory.id }
       })
     },
-    managePortfolioCategoryImages(portfolioCategory) {
+    managePortfolioCategoryMedias(portfolioCategory) {
       this.$router.push({
-        name: 'portfolioCategory-id-images',
+        name: 'portfolioCategory-id-medias',
         params: { id: portfolioCategory.id }
       })
     },

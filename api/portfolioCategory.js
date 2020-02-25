@@ -9,8 +9,8 @@ export default ($axios) => () => ({
     return $axios.$get(`/admin/portfolio/categories/${id}`)
   },
 
-  getPortfolioCategoryImages(id) {
-    return $axios.$get(`/admin/portfolio/categories/${id}/images`)
+  getPortfolioCategoryMedias(id) {
+    return $axios.$get(`/admin/portfolio/categories/${id}/medias`)
   },
 
   createPortfolioCategory(formData) {
