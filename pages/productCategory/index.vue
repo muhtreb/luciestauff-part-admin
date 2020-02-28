@@ -29,6 +29,24 @@
           </v-icon>
         </div>
       </template>
+
+      <template v-slot:item.position="{ item }">
+        <div class="data-table-actions">
+          <v-icon
+            class="mr-2"
+            @click="upPositionProductCategory(item)"
+            v-if="item.position > 1"
+          >
+            mdi-arrow-up-thick
+          </v-icon>
+          <v-icon
+            @click="downPositionProductCategory(item)"
+            v-if="item.position < productCategories.length"
+          >
+            mdi-arrow-down-thick
+          </v-icon>
+        </div>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -46,6 +64,7 @@ export default {
     perPage: 10,
     headers: [
       { text: 'ID', value: 'id' },
+      { text: 'Position', value: 'position', sortable: false },
       { text: 'Nom', value: 'name' },
       { text: 'slug', value: 'slug' },
       { text: 'Actions', value: 'action', sortable: false }
@@ -81,11 +100,25 @@ export default {
         params: { id: productCategory.id }
       })
     },
-    async deleteProductCategory(product) {
+    async deleteProductCategory(productCategory) {
       if (confirm('Êtes vous sûr de vouloir supprimer cette catégorie ?')) {
-        await this.$productCategoryRepository.deleteProductCategory(product.id)
+        await this.$productCategoryRepository.deleteProductCategory(
+          productCategory.id
+        )
         await this.fetchProductCategories()
       }
+    },
+    async upPositionProductCategory(productCategory) {
+      await this.$productCategoryRepository.upPositionProductCategory(
+        productCategory.id
+      )
+      await this.fetchProductCategories()
+    },
+    async downPositionProductCategory(productCategory) {
+      await this.$productCategoryRepository.downPositionProductCategory(
+        productCategory.id
+      )
+      await this.fetchProductCategories()
     }
   },
   mounted() {

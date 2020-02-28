@@ -2,6 +2,7 @@ const qs = require('qs')
 
 export default ($axios) => () => ({
   getPortfolioCategories(params) {
+    console.log(params)
     return $axios.$get(`/admin/portfolio/categories?${qs.stringify(params)}`)
   },
 
@@ -19,6 +20,14 @@ export default ($axios) => () => ({
         'Content-Type': 'multipart/form-data'
       }
     })
+  },
+
+  upPositionPortfolioCategory(id) {
+    return $axios.$post(`/admin/portfolio/categories/${id}/position/up`)
+  },
+
+  downPositionPortfolioCategory(id) {
+    return $axios.$post(`/admin/portfolio/categories/${id}/position/down`)
   },
 
   updatePortfolioCategory(id, formData) {

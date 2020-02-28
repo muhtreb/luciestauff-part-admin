@@ -13,8 +13,10 @@ export const mutations = {
 }
 
 export const actions = {
-  async getPortfolioCategories({ commit }) {
-    const response = await this.$portfolioCategoryRepository.getPortfolioCategories()
+  async getPortfolioCategories({ commit }, params) {
+    const response = await this.$portfolioCategoryRepository.getPortfolioCategories(
+      params
+    )
     commit('setPortfolioCategories', response.data)
     commit('setPagination', response.meta)
   }

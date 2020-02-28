@@ -32,6 +32,24 @@
           </v-icon>
         </div>
       </template>
+
+      <template v-slot:item.position="{ item }">
+        <div class="data-table-actions">
+          <v-icon
+            class="mr-2"
+            @click="upPositionPortfolioCategory(item)"
+            v-if="item.position > 1"
+          >
+            mdi-arrow-up-thick
+          </v-icon>
+          <v-icon
+            @click="downPositionPortfolioCategory(item)"
+            v-if="item.position < portfolioCategories.length"
+          >
+            mdi-arrow-down-thick
+          </v-icon>
+        </div>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -43,14 +61,15 @@ export default {
     showEnded: false,
     loading: false,
     options: {
-      sortBy: ['created_at'],
-      sortDesc: [true]
+      sortBy: ['position'],
+      sortDesc: [false]
     },
     perPage: 10,
     headers: [
-      { text: 'ID', value: 'id' },
-      { text: 'Nom', value: 'name' },
-      { text: 'slug', value: 'slug' },
+      { text: 'ID', value: 'id', sortable: false },
+      { text: 'Position', value: 'position', sortable: false },
+      { text: 'Nom', value: 'name', sortable: false },
+      { text: 'slug', value: 'slug', sortable: false },
       { text: 'Actions', value: 'action', sortable: false }
     ]
   }),
@@ -91,13 +110,25 @@ export default {
         params: { id: portfolioCategory.id }
       })
     },
-    async deletePortfolioCategory(portfolio) {
+    async deletePortfolioCategory(portfolioCategory) {
       if (confirm('Êtes vous sûr de vouloir supprimer cette catégorie ?')) {
         await this.$portfolioCategoryRepository.deletePortfolioCategory(
-          portfolio.id
+          portfolioCategory.id
         )
         await this.fetchPortfolioCategories()
       }
+    },
+    async upPositionPortfolioCategory(portfolioCategory) {
+      await this.$portfolioCategoryRepository.upPositionPortfolioCategory(
+        portfolioCategory.id
+      )
+      await this.fetchPortfolioCategories()
+    },
+    async downPositionPortfolioCategory(portfolioCategory) {
+      await this.$portfolioCategoryRepository.downPositionPortfolioCategory(
+        portfolioCategory.id
+      )
+      await this.fetchPortfolioCategories()
     }
   },
   mounted() {

@@ -18,6 +18,9 @@
       </template>
       <template v-slot:item.action="{ item }">
         <div class="data-table-actions">
+          <v-icon @click="showContactMessage(item)">
+            mdi-eye
+          </v-icon>
           <v-icon @click="deleteContactMessage(item)">
             mdi-delete
           </v-icon>
@@ -66,14 +69,9 @@ export default {
       })
       this.loading = false
     },
-    addContactMessage() {
+    showContactMessage(contactMessage) {
       this.$router.push({
-        name: 'contactMessage-add'
-      })
-    },
-    editContactMessage(contactMessage) {
-      this.$router.push({
-        name: 'contactMessage-id-edit',
+        name: 'contactMessage-id',
         params: { id: contactMessage.id }
       })
     },

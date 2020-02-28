@@ -28,5 +28,13 @@ export default ($axios) => () => ({
 
   deleteProductCategory(id) {
     return $axios.$delete(`/admin/products/categories/${id}`)
+  },
+
+  upPositionProductCategory(id) {
+    return $axios.$post(`/admin/products/categories/${id}/position/up`)
+  },
+
+  downPositionProductCategory(id) {
+    return $axios.$post(`/admin/products/categories/${id}/position/down`)
   }
 })

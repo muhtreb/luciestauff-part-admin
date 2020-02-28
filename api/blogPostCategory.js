@@ -28,5 +28,13 @@ export default ($axios) => () => ({
 
   deleteBlogPostCategory(id) {
     return $axios.$delete(`/admin/blog/posts/categories/${id}`)
+  },
+
+  upPositionBlogPostCategory(id) {
+    return $axios.$post(`/admin/blog/posts/categories/${id}/position/up`)
+  },
+
+  downPositionBlogPostCategory(id) {
+    return $axios.$post(`/admin/blog/posts/categories/${id}/position/down`)
   }
 })

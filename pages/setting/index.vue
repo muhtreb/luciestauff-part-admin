@@ -79,6 +79,11 @@ export default {
             name: 'setting-services'
           })
           break
+        case 'contact':
+          this.$router.push({
+            name: 'setting-contact'
+          })
+          break
         default:
           this.$router.push({
             name: 'setting-key-edit',

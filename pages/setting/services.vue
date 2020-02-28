@@ -41,11 +41,15 @@ export default {
   data() {
     return {
       valid: false,
+      bannerPictureUrl: null,
+      initialBannerPictureUrl: null,
+      bannerPicture: null,
       setting: {
         value: {
           about: {
             sections: []
-          }
+          },
+          banner_picture_url: ''
         }
       }
     }
@@ -53,6 +57,9 @@ export default {
   async mounted() {
     const response = await this.$settingRepository.getSettingByKey('services')
     this.setting = response.data
+
+    this.bannerPictureUrl = this.setting.value.banner_picture_url
+    this.initialBannerPictureUrl = this.setting.value.banner_picture_url
   },
   methods: {
     async submit() {
@@ -61,7 +68,6 @@ export default {
 
       if (this.$refs.form.validate()) {
         const formData = new FormData()
-        formData.append('value', 'services')
         for (const [index, section] of Object.entries(
           this.setting.value.about.sections
         )) {
@@ -106,6 +112,17 @@ export default {
     upSection(index) {
       const sections = this.setting.value.about.sections.splice(index, 1)
       this.dasetting.valueta.about.sections.splice(index - 1, 0, sections[0])
+    },
+    onChangeBannerPicture(event) {
+      if (!event) {
+        this.bannerPictureUrl = this.initialBannerPictureUrl
+      } else if (this.bannerPicture) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.bannerPictureUrl = e.target.result
+        }
+        reader.readAsDataURL(this.bannerPicture)
+      }
     }
   }
 }
