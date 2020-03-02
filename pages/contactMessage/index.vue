@@ -16,6 +16,34 @@
           <v-toolbar-title>Liste des messages</v-toolbar-title>
         </v-toolbar>
       </template>
+      <template v-slot:item.created_at="{ item }">
+        {{ formatDate(item.created_at) }}
+      </template>
+      <template v-slot:item.status="{ item }">
+        <v-chip
+          color="red"
+          text-color="white"
+          v-if="item.status === 'declined'"
+        >
+          Décliné
+        </v-chip>
+
+        <v-chip
+          color="green"
+          text-color="white"
+          v-if="item.status === 'accepted'"
+        >
+          Accepté
+        </v-chip>
+
+        <v-chip
+          color="orange"
+          text-color="white"
+          v-if="item.status === 'pending'"
+        >
+          En attente
+        </v-chip>
+      </template>
       <template v-slot:item.action="{ item }">
         <div class="data-table-actions">
           <v-icon @click="showContactMessage(item)">
@@ -32,6 +60,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import moment from 'moment'
+
 export default {
   data: () => ({
     showEnded: false,
@@ -45,8 +75,9 @@ export default {
       { text: 'ID', value: 'id' },
       { text: 'Statut', value: 'status' },
       { text: 'Email', value: 'email' },
-      { text: 'Nom', value: 'name' },
-      { text: 'Date', value: 'created_at' },
+      { text: 'Nom', value: 'last_name' },
+      { text: 'Prénom', value: 'first_name' },
+      { text: 'Envoyé le', value: 'created_at' },
       { text: 'Actions', value: 'action', sortable: false }
     ]
   }),
@@ -82,6 +113,9 @@ export default {
         )
         await this.fetchContactMessages()
       }
+    },
+    formatDate(date) {
+      return moment(date).format('YYYY-MM-DD HH:mm')
     }
   },
   mounted() {

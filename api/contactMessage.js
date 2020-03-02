@@ -11,5 +11,13 @@ export default ($axios) => () => ({
 
   deleteContactMessage(id) {
     return $axios.$delete(`/admin/contact_messages/${id}`)
+  },
+
+  declineContactMessage(id) {
+    return $axios.$post(`/admin/contact_messages/${id}/decline`)
+  },
+
+  acceptContactMessage(id) {
+    return $axios.$post(`/admin/contact_messages/${id}/accept`)
   }
 })
