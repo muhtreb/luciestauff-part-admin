@@ -19,5 +19,17 @@ export default ($axios) => () => ({
 
   acceptContactMessage(id) {
     return $axios.$post(`/admin/contact_messages/${id}/accept`)
+  },
+
+  getContactMessageAnswerByStatus(id, status) {
+    return $axios.$get(`/admin/contact_messages/${id}/answer/${status}`)
+  },
+
+  sendContactMessageAnswer(id, formData) {
+    return $axios.$post(`/admin/contact_messages/${id}/answer/send`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   }
 })

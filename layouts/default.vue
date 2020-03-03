@@ -48,7 +48,7 @@
           </v-list-item>
         </v-list-group>
 
-        <v-list-group prepend-icon="mdi-file-document-edit">
+        <v-list-group prepend-icon="mdi-format-paint">
           <template v-slot:activator>
             <v-list-item-title>Portfolio</v-list-item-title>
           </template>

@@ -43,6 +43,10 @@
         >
           En attente
         </v-chip>
+
+        <v-chip v-if="item.status === 'more_info'">
+          Plus d'infos
+        </v-chip>
       </template>
       <template v-slot:item.action="{ item }">
         <div class="data-table-actions">

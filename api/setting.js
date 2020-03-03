@@ -5,6 +5,16 @@ export default ($axios) => () => ({
     return $axios.$get(`/admin/settings?${qs.stringify(params)}`)
   },
 
+  async getSettingsByKeys(params) {
+    const response = await $axios.$get(
+      `/admin/settings?${qs.stringify(params)}`
+    )
+    return response.data.reduce((obj, item) => {
+      obj[item.key] = item.value
+      return obj
+    }, {})
+  },
+
   getSettingById(id) {
     return $axios.$get(`/admin/settings/${id}`)
   },
