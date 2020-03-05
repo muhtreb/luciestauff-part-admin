@@ -12,7 +12,11 @@
       label="Valeur"
       :error-messages="getFieldErrors('value')"
       outlined
+      v-if="setting.type === 'text'"
     ></v-textarea>
+    <div v-if="setting.type === 'markdown'">
+      <tui-markdown-editor v-model="setting.value" mode="wysiwyg" />
+    </div>
     <v-btn color="primary" type="submit">Envoyer</v-btn>
   </v-form>
 </template>
