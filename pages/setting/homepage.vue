@@ -82,6 +82,32 @@
         <v-textarea v-model="setting.value.services.content" label="Content">
         </v-textarea>
       </div>
+
+      <div class="mt-4">
+        <h2>Blog</h2>
+        <div class="row">
+          <div class="col-auto" v-if="blogPictureUrl">
+            <v-img
+              :src="blogPictureUrl"
+              v-if="blogPictureUrl"
+              width="300px"
+              class="mr-3"
+            ></v-img>
+          </div>
+          <div class="col">
+            <v-file-input
+              name="image"
+              v-model="blogPicture"
+              prepend-icon="mdi-camera"
+              label="Picture"
+              outlined
+              accept="image/*"
+              @change="onChangeBlogPicture($event)"
+              ref="inputBlogPicture"
+            ></v-file-input>
+          </div>
+        </div>
+      </div>
       <v-btn color="primary" type="submit">Envoyer</v-btn>
     </v-form>
   </div>
@@ -98,6 +124,9 @@ export default {
       servicesBannerPictureUrl: null,
       initialServicesBannerPictureUrl: null,
       servicesBannerPicture: null,
+      blogPictureUrl: null,
+      initialBlogPictureUrl: null,
+      blogPicture: null,
       setting: {
         value: {
           about: {
@@ -107,6 +136,9 @@ export default {
           services: {
             banner_picture_url: '',
             content: ''
+          },
+          blog: {
+            picture_url: ''
           }
         }
       }
@@ -119,8 +151,11 @@ export default {
     this.profilePictureUrl = this.setting.value.about.profile_picture_url
     this.initialProfilePictureUrl = this.setting.value.about.profile_picture_url
 
-    this.bannerServicesPictureUrl = this.setting.value.services.banner_picture_url
-    this.initialBannerServicesPictureUrl = this.setting.value.services.banner_picture_url
+    this.servicesBannerPictureUrl = this.setting.value.services.banner_picture_url
+    this.initialServicesBannerPictureUrl = this.setting.value.services.banner_picture_url
+
+    this.blogPictureUrl = this.setting.value.blog.picture_url
+    this.initialBlogPictureUrl = this.setting.value.blog.picture_url
   },
   methods: {
     async submit() {
@@ -131,6 +166,10 @@ export default {
         const formData = new FormData()
         if (this.profilePicture !== null) {
           formData.append(`profile_picture`, this.profilePicture)
+        }
+
+        if (this.blogPicture !== null) {
+          formData.append(`blog[picture]`, this.blogPicture)
         }
 
         if (this.servicesBannerPicture !== null) {
@@ -210,6 +249,17 @@ export default {
           this.servicesBannerPictureUrl = e.target.result
         }
         reader.readAsDataURL(this.servicesBannerPicture)
+      }
+    },
+    onChangeBlogPicture(event) {
+      if (!event) {
+        this.blogPictureUrl = this.initialBlogPictureUrl
+      } else if (this.blogPicture) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.blogPictureUrl = e.target.result
+        }
+        reader.readAsDataURL(this.blogPicture)
       }
     }
   }
