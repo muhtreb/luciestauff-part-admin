@@ -3,6 +3,29 @@
     <h1>Paramètres de la page Services</h1>
 
     <v-form v-model="valid" @submit.prevent="submit" ref="form">
+      <div class="row">
+        <div class="col-auto" v-if="aboutPictureUrl">
+          <v-img
+            :src="aboutPictureUrl"
+            v-if="aboutPictureUrl"
+            width="300px"
+            class="mr-3"
+          ></v-img>
+        </div>
+        <div class="col">
+          <v-file-input
+            name="image"
+            v-model="aboutPicture"
+            prepend-icon="mdi-camera"
+            label="About picture"
+            outlined
+            accept="image/*"
+            @change="onChangeAboutPicture($event)"
+            ref="inputAboutPicture"
+          ></v-file-input>
+        </div>
+      </div>
+
       <h2>Sections</h2>
       <v-row
         v-for="(section, index) in setting.value.about.sections"
@@ -41,15 +64,15 @@ export default {
   data() {
     return {
       valid: false,
-      bannerPictureUrl: null,
-      initialBannerPictureUrl: null,
-      bannerPicture: null,
+      aboutPictureUrl: null,
+      initialAboutPictureUrl: null,
+      aboutPicture: null,
       setting: {
         value: {
           about: {
-            sections: []
-          },
-          banner_picture_url: ''
+            sections: [],
+            picture_url: ''
+          }
         }
       }
     }
@@ -58,8 +81,8 @@ export default {
     const response = await this.$settingRepository.getSettingByKey('services')
     this.setting = response.data
 
-    this.bannerPictureUrl = this.setting.value.banner_picture_url
-    this.initialBannerPictureUrl = this.setting.value.banner_picture_url
+    this.aboutPictureUrl = this.setting.value.about.picture_url
+    this.initialAboutPictureUrl = this.setting.value.about.picture_url
   },
   methods: {
     async submit() {
@@ -73,6 +96,10 @@ export default {
         )) {
           formData.append(`sections[${index}][title]`, section.title)
           formData.append(`sections[${index}][content]`, section.content)
+        }
+
+        if (this.aboutPicture !== null) {
+          formData.append(`about_picture`, this.aboutPicture)
         }
 
         try {
@@ -113,15 +140,15 @@ export default {
       const sections = this.setting.value.about.sections.splice(index, 1)
       this.dasetting.valueta.about.sections.splice(index - 1, 0, sections[0])
     },
-    onChangeBannerPicture(event) {
+    onChangeAboutPicture(event) {
       if (!event) {
-        this.bannerPictureUrl = this.initialBannerPictureUrl
-      } else if (this.bannerPicture) {
+        this.aboutPictureUrl = this.initialAboutPictureUrl
+      } else if (this.aboutPicture) {
         const reader = new FileReader()
         reader.onload = (e) => {
-          this.bannerPictureUrl = e.target.result
+          this.aboutPictureUrl = e.target.result
         }
-        reader.readAsDataURL(this.bannerPicture)
+        reader.readAsDataURL(this.aboutPicture)
       }
     }
   }
