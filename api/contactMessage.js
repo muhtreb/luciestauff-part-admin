@@ -13,16 +13,16 @@ export default ($axios) => () => ({
     return $axios.$delete(`/admin/contact_messages/${id}`)
   },
 
-  declineContactMessage(id) {
-    return $axios.$post(`/admin/contact_messages/${id}/decline`)
-  },
-
-  acceptContactMessage(id) {
-    return $axios.$post(`/admin/contact_messages/${id}/accept`)
-  },
-
   getContactMessageAnswerByStatus(id, status) {
     return $axios.$get(`/admin/contact_messages/${id}/answer/${status}`)
+  },
+
+  updateStatus(id, status) {
+    return $axios.$post(`/admin/contact_messages/${id}/status/${status}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
   },
 
   sendContactMessageAnswer(id, formData) {

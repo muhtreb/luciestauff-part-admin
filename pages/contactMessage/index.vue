@@ -31,21 +31,61 @@
         <v-chip
           color="green"
           text-color="white"
-          v-if="item.status === 'accepted'"
+          v-else-if="item.status === 'quoted'"
         >
-          Accepté
+          Devis envoyé
+        </v-chip>
+
+        <v-chip
+          color="green"
+          text-color="white"
+          v-else-if="item.status === 'booked'"
+        >
+          Devis accepté
         </v-chip>
 
         <v-chip
           color="orange"
           text-color="white"
-          v-if="item.status === 'pending'"
+          v-else-if="item.status === 'pending'"
         >
           En attente
         </v-chip>
 
-        <v-chip v-if="item.status === 'more_info'">
-          Plus d'infos
+        <v-chip
+          color="red"
+          text-color="white"
+          v-else-if="item.status === 'customer_cancelled'"
+        >
+          Annulé par le client
+        </v-chip>
+
+        <v-chip
+          color="red"
+          text-color="white"
+          v-else-if="item.status === 'cancelled'"
+        >
+          Annulé
+        </v-chip>
+
+        <v-chip
+          color="blue"
+          text-color="white"
+          v-else-if="item.status === 'completed'"
+        >
+          Terminé
+        </v-chip>
+
+        <v-chip
+          color="red"
+          text-color="white"
+          v-else-if="item.status === 'quote_not_accepted'"
+        >
+          Devis refusé
+        </v-chip>
+
+        <v-chip v-else>
+          {{ item.status }}
         </v-chip>
       </template>
       <template v-slot:item.action="{ item }">

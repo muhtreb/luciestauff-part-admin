@@ -85,10 +85,17 @@ export default {
           })
           break
         default:
-          this.$router.push({
-            name: 'setting-key-edit',
-            params: { key: setting.key }
-          })
+          if (setting.key.startsWith('contact_message_answer')) {
+            this.$router.push({
+              name: 'setting-key-editContactMessage',
+              params: { key: setting.key }
+            })
+          } else {
+            this.$router.push({
+              name: 'setting-key-edit',
+              params: { key: setting.key }
+            })
+          }
           break
       }
     }
