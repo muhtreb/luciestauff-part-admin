@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 const env = require('dotenv').config()
 
 export default {
-  mode: 'spa',
+  ssr: false,
   /*
    ** Headers of the page
    */
