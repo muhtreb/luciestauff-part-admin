@@ -97,7 +97,7 @@ export default {
 
           this.nbMediasUploaded++
         } catch (error) {
-          console.log(error)
+          console.error(error)
         }
       }
 
@@ -138,7 +138,7 @@ export default {
 
         this.medias.splice(index, 1)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
   }

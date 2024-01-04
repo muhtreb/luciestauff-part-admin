@@ -2,7 +2,6 @@ const qs = require('qs')
 
 export default ($axios) => () => ({
   getPortfolioCategories(params) {
-    console.log(params)
     return $axios.$get(`/admin/portfolio/categories?${qs.stringify(params)}`)
   },
 

@@ -15,7 +15,7 @@
       v-if="setting.type === 'text'"
     ></v-textarea>
     <div v-if="setting.type === 'markdown'">
-      <tui-markdown-editor v-model="setting.value" mode="wysiwyg" />
+      <v-textarea v-model="setting.value" />
     </div>
     <v-btn color="primary" type="submit">Envoyer</v-btn>
   </v-form>

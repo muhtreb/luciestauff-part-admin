@@ -31,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/api', '~/plugins/tuiMarkdown', '~/plugins/grid'],
+  plugins: ['~/plugins/api', '~/plugins/grid'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -47,8 +47,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv',
-    '@nuxtjs/auth'
+    '@nuxtjs/dotenv'
   ],
   /*
    ** Axios module configuration
@@ -58,37 +57,6 @@ export default {
     baseURL: process.env.API_BASE_URL,
     credentials: true,
     init(axios) {
-      axios.defaults.withCredentials = true
-    }
-  },
-
-  auth: {
-    strategies: {
-      local: {
-        endpoints: {
-          login: {
-            url: '/auth/login',
-            method: 'post',
-            withCredentials: true,
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Content-Type': 'application/json'
-            }
-          },
-          user: {
-            url: '/user',
-            method: 'get',
-            propertyName: 'data',
-            withCredentials: true,
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-              'Content-Type': 'application/json'
-            }
-          }
-        },
-        tokenRequired: false,
-        tokenType: false
-      }
     }
   },
   /*
@@ -111,11 +79,6 @@ export default {
         }
       }
     }
-  },
-
-  env: {
-    baseUrl: process.env.BASE_URL,
-    airlockCsrfCookieUrl: process.env.AIRLOCK_CSRF_COOKIE_URL
   },
   /*
    ** Build configuration

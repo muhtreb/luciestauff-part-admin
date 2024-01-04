@@ -57,9 +57,8 @@
     ></v-autocomplete>
     <div>
       <h3>Contenu</h3>
-      <tui-markdown-editor
+      <v-textarea
         v-model="blogPost.content"
-        mode="wysiwyg"
         :error-messages="getFieldErrors('content')"
       />
       <div v-if="hasFieldErrors('content')">

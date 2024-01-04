@@ -26,14 +26,10 @@
       </div>
 
       <h2>Sections</h2>
-      <v-row
-        v-for="(section, index) in setting.value.about.sections"
-        :key="index"
-        class="mb-10"
-      >
+      <v-row v-for="(section, index) in sections" :key="index" class="mb-10">
         <v-col>
           <v-text-field v-model="section.title" label="Title"></v-text-field>
-          <tui-markdown-editor v-model="section.content" mode="wysiwyg" />
+          <v-textarea v-model="section.content" />
         </v-col>
         <v-col class="col-auto">
           <div class="d-flex flex-wrap flex-column">
@@ -157,6 +153,11 @@ export default {
     this.blogPictureUrl = this.setting.value.blog.picture_url
     this.initialBlogPictureUrl = this.setting.value.blog.picture_url
   },
+  computed: {
+    sections() {
+      return this.setting.value.about.sections
+    }
+  },
   methods: {
     async submit() {
       this.submitted = false
@@ -192,6 +193,7 @@ export default {
         }
 
         try {
+          console.log(formData)
           await this.$settingRepository.updateSetting('homepage', formData)
 
           this.$store.dispatch(

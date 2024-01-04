@@ -17,7 +17,7 @@
         outlined
       ></v-text-field>
       <div class="mb-4">
-        <tui-markdown-editor v-model="setting.value.message" mode="wysiwyg" />
+        <v-textarea v-model="setting.value.message" />
       </div>
       <v-btn color="primary" type="submit">Envoyer</v-btn>
     </v-form>

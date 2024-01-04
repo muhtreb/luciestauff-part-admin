@@ -108,11 +108,7 @@
                     :error-messages="getFieldErrors('subject')"
                   ></v-text-field>
                   <h3>Message</h3>
-                  <tui-markdown-editor
-                    v-model="answerMessage"
-                    mode="wysiwyg"
-                    required
-                  />
+                  <v-textarea v-model="answerMessage" required />
                   <div v-if="hasFieldErrors('message')">
                     <div
                       v-for="(error, index) in getFieldErrors('message')"

@@ -34,7 +34,7 @@
       >
         <v-col>
           <v-text-field v-model="section.title" label="Title"></v-text-field>
-          <tui-markdown-editor v-model="section.content" mode="wysiwyg" />
+          <v-textarea v-model="section.content" />
         </v-col>
         <v-col class="col-auto">
           <div class="d-flex flex-wrap flex-column">

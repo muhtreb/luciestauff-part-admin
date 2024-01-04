@@ -103,7 +103,6 @@
 import Snackbar from '@/components/Snackbar.vue'
 
 export default {
-  middleware: 'auth',
   components: { Snackbar },
   data() {
     return {
