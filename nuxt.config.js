@@ -31,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/api', '~/plugins/grid'],
+  plugins: ['~/plugins/api', '~/plugins/grid', '~/plugins/axios'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -54,10 +54,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.API_BASE_URL,
-    credentials: true,
-    init(axios) {
-    }
+    baseURL: process.env.API_BASE_URL
   },
   /*
    ** vuetify module configuration
